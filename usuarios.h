@@ -1,12 +1,15 @@
 #ifndef USUARIOS_H
 #define USUARIOS_H
 
+#include "filmes.h"
+
 //Estrutura de AVL de usuarios
 typedef struct usuarioBloco{
     char nome[50];
     int numeroUSP;
     usuarioBloco *esq;
     usuarioBloco *dir;
+    filmeLista *filmes;
     int fb;
 
 } usuarioBloco;

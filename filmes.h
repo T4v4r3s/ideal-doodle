@@ -6,19 +6,25 @@ typedef struct filmeBloco{
     char nome[50];
 } filmeBloco;
 
+//Estrutura de lista ordenada de filmes duplamente encadeada
 typedef struct filmeLista{
     filmeBloco *filme;
     filmeLista *prox;
+    filmeLista *ant;
 } filmeLista;
 
-//Funcoes de filmes
-filmeLista *criaListaFilmes();
-filmeBloco *criaBlocoFilme(char nome[]);
-filmeLista *insereFilme(filmeLista *lista, filmeBloco *novo);
-filmeBloco *buscaFilme(filmeLista *lista, char nome[]);
-filmeLista *removeFilme(filmeLista *lista, char nome[]);
-void imprimeFilmes(filmeLista *lista);
-void destroiListaFilmes(filmeLista *lista);
+typedef struct posicaoLista{
+    filmeLista *inicio;
+    filmeLista *fim;
+} posicaoLista;
 
+//Funcoes de filmes
+void inicializaListaFilmes(posicaoLista *posicao);
+filmeLista *criaListaFilmes(posicaoLista *posicao);
+filmeBloco *criaBlocoFilme(char nome[]);
+void *insereFilmeOrdenado(posicaoLista *posicoes, filmeBloco *novo);
+filmeBloco *buscaFilme(filmeLista *lista, char nome[]);
+int *removeFilme(filmeLista *lista, char nome[]);
+void destroiListaFilmes(posicaoLista *posicoes);
 
 #endif
