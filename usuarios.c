@@ -2,15 +2,6 @@
 #include "filmes.h"
 #include "usuarios.h"
 
-//Funcao que cria a arvore de usuarios
-usuarioArvore *criaArvoreUsuarios(){
-    usuarioArvore *arvore = (usuarioArvore *) malloc(sizeof(usuarioArvore));
-    if(arvore == NULL){
-        return NULL;
-    }
-    arvore->raiz = NULL;
-    return arvore;
-}
 
 //Funcao que inicializa a arvore de usuarios
 usuarioArvore *inicializaArvoreUsuarios(){
@@ -85,7 +76,7 @@ void imprimeUsuariosEmOrdem(usuarioBloco *raiz){
 }
 
 //Funcao que imprime os usuarios PRE ORDEM
-imprimeUsuariosPreOrdem(usuarioBloco *raiz){
+void imprimeUsuariosPreOrdem(usuarioBloco *raiz){
 
     if(raiz == NULL){
         return;
