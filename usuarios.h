@@ -9,7 +9,7 @@ typedef struct usuarioBloco{
     int numeroUSP;
     usuarioBloco *esq;
     usuarioBloco *dir;
-    filmeLista *filmes;
+    posicaoLista *posicao;
     int fb;
 
 } usuarioBloco;
@@ -20,10 +20,17 @@ typedef struct usuarioArvore{
 } usuarioArvore;
 
 //Funcoes de usuarios
-usuarioArvore *criaArvoreUsuarios();
+
+usuarioArvore *inicializaArvoreUsuarios();
 usuarioBloco *criaBlocoUsuario(char nome[], int numeroUSP);
-usuarioBloco *insereUsuario(usuarioBloco *raiz, usuarioBloco *novo);
 usuarioBloco *buscaUsuario(usuarioBloco *raiz, int numeroUSP);
+void imprimeUsuariosEmOrdem(usuarioBloco *raiz);
+void imprimeUsuariosPreOrdem(usuarioBloco *raiz);
+void imprimeUsuariosPosOrdem(usuarioBloco *raiz);
+
+/* Ideia de algumas funcoes que faltam (talvez os tipos e nomes possam ser diferentes)
+
+int *insereUsuario(usuarioBloco *raiz, usuarioBloco *novo);
 usuarioBloco *removeUsuario(usuarioBloco *raiz, int numeroUSP);
 usuarioBloco *removeUsuarioAux(usuarioBloco *raiz, int numeroUSP);
 usuarioBloco *rotacaoDireita(usuarioBloco *raiz);
@@ -31,10 +38,10 @@ usuarioBloco *rotacaoEsquerda(usuarioBloco *raiz);
 usuarioBloco *rotacaoDuplaDireita(usuarioBloco *raiz);
 usuarioBloco *rotacaoDuplaEsquerda(usuarioBloco *raiz);
 int alturaUsuario(usuarioBloco *raiz);
-int fatorBalanceamentoUsuario(usuarioBloco *raiz);
-void imprimeUsuarios(usuarioBloco *raiz);
+int fatorBalanceamentoUsuario(usuarioBloco *raiz); (talvez essa nem possar ser util)
 void destroiArvoreUsuarios(usuarioBloco *raiz);
 void destroiArvoreUsuarios(usuarioArvore *arvore);
 
+*/
 
 #endif
