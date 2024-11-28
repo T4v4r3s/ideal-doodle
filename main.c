@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "filmes.h"
 #include "usuarios.h"
 
@@ -42,7 +43,7 @@ int main() {
             scanf("%d", &NUSPLogin);
 
             printf("Informe a senha: \n");
-            scanf("%s", &senhaLogin);
+            scanf("%s", senhaLogin);
 
             if(buscaUspSenha(usuarios, NUSPLogin, senhaLogin)){
                 logado = 1;
@@ -52,13 +53,13 @@ int main() {
             //Criar usuario
 
             printf("Informe o nome do usuario\n");
-            scanf("%s", &nomeCriacao);
+            scanf("%s", nomeCriacao);
 
             printf("Informe o NUSP\n");
             scanf("%d", &NUSPCriacao);
 
             printf("Informe a senha\n");
-            scanf("%s", &senhaCriacao);
+            scanf("%s", senhaCriacao);
 
             inserirNo(usuarios->raiz, nomeCriacao, senhaCriacao, NUSPCriacao);
 

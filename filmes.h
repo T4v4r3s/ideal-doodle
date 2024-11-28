@@ -6,12 +6,14 @@ typedef struct filmeBloco{
     char nome[50];
 } filmeBloco;
 
+typedef struct filmeLista filmeLista;
+
 //Estrutura de lista ordenada de filmes duplamente encadeada
-typedef struct filmeLista{
+struct filmeLista{
     filmeBloco *filme;
     filmeLista *prox;
     filmeLista *ant;
-} filmeLista;
+};
 
 typedef struct posicaoLista{
     filmeLista *inicio;

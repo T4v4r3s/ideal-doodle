@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 #include "filmes.h"
 #include "usuarios.h"
 
@@ -114,6 +116,12 @@ void imprimeUsuariosPosOrdem(usuarioBloco *raiz){
     printf("Nome: %s\n", raiz->nome);
     printf("Numero USP: %d\n", raiz->numeroUSP);
 
+}
+
+//Funcao padrao de imprimir usuario
+void imprimeUsuarios(usuarioBloco *usuario){
+    printf("NOME: %s \n", usuario->nome);
+    printf("NUSP: %d\n", usuario->numeroUSP);
 }
 
 //Funcao de login
