@@ -17,7 +17,7 @@ usuarioArvore *inicializaArvoreUsuarios(){
 
 
 //Funcao que cria um bloco de usuario
-usuarioBloco *criaBlocoUsuario(char nome[], int numeroUSP){
+usuarioBloco *criaBlocoUsuario(char nome[], int numeroUSP, char senha[]){
 
     usuarioBloco *novo = (usuarioBloco *) malloc(sizeof(usuarioBloco));
 
@@ -27,6 +27,7 @@ usuarioBloco *criaBlocoUsuario(char nome[], int numeroUSP){
 
     strcpy(novo->nome, nome);
     novo->numeroUSP = numeroUSP;
+    strcpy(novo->senha, senha);
     novo->esq = NULL;
     novo->dir = NULL;
     novo->posicao = (posicaoLista *) malloc(sizeof(posicaoLista)); //Mudar (?)
@@ -112,5 +113,26 @@ void imprimeUsuariosPosOrdem(usuarioBloco *raiz){
 
     printf("Nome: %s\n", raiz->nome);
     printf("Numero USP: %d\n", raiz->numeroUSP);
+
+}
+
+//Funcao de login
+int buscaUspSenha(usuarioArvore *usuarios, int NUSP, char senha[]){
+
+    usuarioBloco *procurado;
+
+    procurado = buscaUsuario(&usuarios, NUSP);
+
+    //Caso nao ache um usuario com o nome
+    if(procurado == NULL){
+        return 1;
+    }
+    //Caso ache o usuario e senha valida
+    if(strcmp(procurado->senha, senha) == 0){
+        return 0;
+    }
+
+    //Caso ache usuario mas senha errada
+    return 1;
 
 }

@@ -7,6 +7,7 @@
 typedef struct usuarioBloco{
     char nome[50];
     int numeroUSP;
+    char senha[50];
     usuarioBloco *esq;
     usuarioBloco *dir;
     posicaoLista *posicao;
@@ -22,11 +23,12 @@ typedef struct usuarioArvore{
 //Funcoes de usuarios
 
 usuarioArvore *inicializaArvoreUsuarios();
-usuarioBloco *criaBlocoUsuario(char nome[], int numeroUSP);
+usuarioBloco *criaBlocoUsuario(char nome[], int numeroUSP, char senha[]);
 usuarioBloco *buscaUsuario(usuarioBloco *raiz, int numeroUSP);
 void imprimeUsuariosEmOrdem(usuarioBloco *raiz);
 void imprimeUsuariosPreOrdem(usuarioBloco *raiz);
 void imprimeUsuariosPosOrdem(usuarioBloco *raiz);
+int buscaUspSenha(usuarioArvore *usuarios, int NUSP, char senha[]);
 
 /* Ideia de algumas funcoes que faltam (talvez os tipos e nomes possam ser diferentes)
 
