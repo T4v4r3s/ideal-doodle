@@ -3,25 +3,25 @@
 
 #include "filmes.h"
 
-//Estrutura de AVL de usuarios
-typedef struct usuarioBloco{
+// Estrutura de AVL de usuarios
+typedef struct usuarioBloco {
     char nome[50];
     int numeroUSP;
     char senha[50];
-    usuarioBloco *esq;
-    usuarioBloco *dir;
-    posicaoLista *posicao;
-    int fb;
+    int altura;
+    struct usuarioBloco *esq;
+    struct usuarioBloco *dir;
+    struct posicaoLista *posicao;
+    int fb; // Fator de balanceamento
 
 } usuarioBloco;
 
-//Estrutura de AVL de usuarios
-typedef struct usuarioArvore{
+// Estrutura de AVL de usuarios
+typedef struct usuarioArvore {
     usuarioBloco *raiz;
 } usuarioArvore;
 
-//Funcoes de usuarios
-
+// Funções de usuarios
 usuarioArvore *inicializaArvoreUsuarios();
 usuarioBloco *criaBlocoUsuario(char nome[], int numeroUSP, char senha[]);
 usuarioBloco *buscaUsuario(usuarioBloco *raiz, int numeroUSP);
@@ -29,21 +29,13 @@ void imprimeUsuariosEmOrdem(usuarioBloco *raiz);
 void imprimeUsuariosPreOrdem(usuarioBloco *raiz);
 void imprimeUsuariosPosOrdem(usuarioBloco *raiz);
 int buscaUspSenha(usuarioArvore *usuarios, int NUSP, char senha[]);
+int obterAltura(usuarioBloco *no);
+int obterMaximo(int valor1, int valor2);
+usuarioBloco* criarNovoNo(char nome[], char senha[], int numeroUSP);
+usuarioBloco *rotacionarDireita(usuarioBloco *noDesbalanceado);
+usuarioBloco *rotacionarEsquerda(usuarioBloco *noDesbalanceado);
+int obterFatorBalanceamento(usuarioBloco *no);
+usuarioBloco* inserirNo(usuarioBloco* raiz, char nome[], char senha[], int numeroUSP);
+void inserirUsuario(usuarioArvore *arvore, usuarioBloco novoUsuario);
 
-/* Ideia de algumas funcoes que faltam (talvez os tipos e nomes possam ser diferentes)
-
-int *insereUsuario(usuarioBloco *raiz, usuarioBloco *novo);
-usuarioBloco *removeUsuario(usuarioBloco *raiz, int numeroUSP);
-usuarioBloco *removeUsuarioAux(usuarioBloco *raiz, int numeroUSP);
-usuarioBloco *rotacaoDireita(usuarioBloco *raiz);
-usuarioBloco *rotacaoEsquerda(usuarioBloco *raiz);
-usuarioBloco *rotacaoDuplaDireita(usuarioBloco *raiz);
-usuarioBloco *rotacaoDuplaEsquerda(usuarioBloco *raiz);
-int alturaUsuario(usuarioBloco *raiz);
-int fatorBalanceamentoUsuario(usuarioBloco *raiz); (talvez essa nem possar ser util)
-void destroiArvoreUsuarios(usuarioBloco *raiz);
-void destroiArvoreUsuarios(usuarioArvore *arvore);
-
-*/
-
-#endif
+#endif // USUARIOS_H

@@ -60,15 +60,8 @@ int main() {
             printf("Informe a senha\n");
             scanf("%s", &senhaCriacao);
 
-            usuarioBloco *novoUsuario = criaBlocoUsuario(nomeCriacao, NUSPCriacao, senhaCriacao);
-            if (novoUsuario == NULL){
-                printf("Erro interno");
-                return 1;
-            }
+            inserirNo(usuarios->raiz, nomeCriacao, senhaCriacao, NUSPCriacao);
 
-            //Inserir aqui na arvore
-
-            
             break;
         default:
             printf("Informe um numero valido!");
