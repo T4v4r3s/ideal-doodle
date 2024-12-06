@@ -125,7 +125,7 @@ int buscaUspSenha(usuarioArvore *usuarios, int NUSP, char senha[]){
 
     usuarioBloco *procurado;
 
-    procurado = buscaUsuario(&usuarios->raiz, NUSP);
+    procurado = buscaUsuario(usuarios->raiz, NUSP);
 
     //Caso nao ache um usuario com o nome
     if(procurado == NULL){
