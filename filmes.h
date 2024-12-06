@@ -24,9 +24,9 @@ typedef struct posicaoLista{
 void inicializaListaFilmes(posicaoLista *posicao);
 filmeLista *criaListaFilmes(posicaoLista *posicao);
 filmeBloco *criaBlocoFilme(char nome[]);
-void *insereFilmeOrdenado(posicaoLista *posicoes, filmeBloco *novo);
+int insereFilmeOrdenado(posicaoLista *posicoes, filmeBloco *novo);
 filmeBloco *buscaFilme(filmeLista *lista, char nome[]);
-int *removeFilme(filmeLista *lista, char nome[]);
+int removeFilme(filmeLista *lista, char nome[]);
 void destroiListaFilmes(posicaoLista *posicoes);
 
 #endif

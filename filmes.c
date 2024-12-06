@@ -1,5 +1,6 @@
 #include "filmes.h"
 #include <stdlib.h>
+#include <string.h>
 
 //Funcao que inicializa uma lista de filmes
 void inicializaListaFilmes(posicaoLista *posicao){
@@ -41,7 +42,7 @@ filmeBloco *criaBlocoFilme(char nome[]){
 }
 
 //Funcao que insere um filme na lista de filmes de forma ordenada
-void *insereFilmeOrdenado(posicaoLista *posicoes, filmeBloco *novo){
+int insereFilmeOrdenado(posicaoLista *posicoes, filmeBloco *novo){
 
     filmeLista *aux = posicoes->inicio;
     filmeLista *ant = NULL;
@@ -53,7 +54,7 @@ void *insereFilmeOrdenado(posicaoLista *posicoes, filmeBloco *novo){
 
     filmeLista *novoBloco = (filmeLista *) malloc(sizeof(filmeLista));
     if(novoBloco == NULL){
-        return NULL;
+        return 1;
     }
     novoBloco->filme = novo;
 
@@ -72,6 +73,8 @@ void *insereFilmeOrdenado(posicaoLista *posicoes, filmeBloco *novo){
         }
         ant->prox = novoBloco;
     }
+
+    return 0;
 
 }
 
@@ -93,7 +96,7 @@ filmeBloco *buscaFilme(filmeLista *lista, char nome[]){
 }
 
 //Funcao que remove um filme da lista de filmes (podemos mudar a forma que faz para ser mais eficiente?)
-int *removeFilme(filmeLista *lista, char nome[]){
+int removeFilme(filmeLista *lista, char nome[]){
 
     filmeLista *aux = lista;
     filmeLista *ant = NULL;

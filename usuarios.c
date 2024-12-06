@@ -66,14 +66,14 @@ void imprimeUsuariosEmOrdem(usuarioBloco *raiz){
     }
 
     if (raiz->esq != NULL){
-        imprimeUsuarios(raiz->esq);
+        imprimeUsuariosEmOrdem(raiz->esq);
     }
 
     printf("Nome: %s\n", raiz->nome);
     printf("Numero USP: %d\n", raiz->numeroUSP);
 
     if (raiz->dir != NULL){
-        imprimeUsuarios(raiz->dir);
+        imprimeUsuariosEmOrdem(raiz->dir);
     }
 
 }
@@ -89,11 +89,11 @@ void imprimeUsuariosPreOrdem(usuarioBloco *raiz){
     printf("Numero USP: %d\n", raiz->numeroUSP);
 
     if (raiz->esq != NULL){
-        imprimeUsuarios(raiz->esq);
+        imprimeUsuariosPreOrdem(raiz->esq);
     }
 
     if (raiz->dir != NULL){
-        imprimeUsuarios(raiz->dir);
+        imprimeUsuariosPreOrdem(raiz->dir);
     }
 
 }
@@ -106,11 +106,11 @@ void imprimeUsuariosPosOrdem(usuarioBloco *raiz){
     }
 
     if (raiz->esq != NULL){
-        imprimeUsuarios(raiz->esq);
+        imprimeUsuariosPosOrdem(raiz->esq);
     }
 
     if (raiz->dir != NULL){
-        imprimeUsuarios(raiz->dir);
+        imprimeUsuariosPosOrdem(raiz->dir);
     }
 
     printf("Nome: %s\n", raiz->nome);
@@ -118,18 +118,14 @@ void imprimeUsuariosPosOrdem(usuarioBloco *raiz){
 
 }
 
-//Funcao padrao de imprimir usuario
-void imprimeUsuarios(usuarioBloco *usuario){
-    printf("NOME: %s \n", usuario->nome);
-    printf("NUSP: %d\n", usuario->numeroUSP);
-}
+
 
 //Funcao de login
 int buscaUspSenha(usuarioArvore *usuarios, int NUSP, char senha[]){
 
     usuarioBloco *procurado;
 
-    procurado = buscaUsuario(&usuarios, NUSP);
+    procurado = buscaUsuario(&usuarios->raiz, NUSP);
 
     //Caso nao ache um usuario com o nome
     if(procurado == NULL){
