@@ -2,6 +2,10 @@
 #include "filmes.h"
 #include "usuarios.h"
 
+int RecomendarColega(ArvoreUsuarios*, posicaoLista *posicao){
+    PonteiroAux* = &posicao -> inicio;
+     while()
+}
 int main(){
     int numeroUSP;
     int pessoa;
@@ -10,7 +14,8 @@ int main(){
     printf("Qual o seu número USP, por favor ?")
     scanf("%d", &numeroUSP);
     pessoa = buscaUsuario(usuarioBloco *raiz, int numeroUSP);
+  
+   
+  
 
-    // A segunda eh conseguir a lista de filmes do usuario 
-    pessoa.posicaoLista
 }
