@@ -1,23 +1,24 @@
-#include<stdio.h>
+#include <stdio.h>
+#include <string.h>
 #include "filmes.h"
 #include "usuarios.h"
 
-typedef struct filmeBloco{
+// Estruturas de filmes e usuários
+typedef struct filmeBloco {
     char nome[50];
 } filmeBloco;
 
-struct filmeLista{
+struct filmeLista {
     filmeBloco *filme;
-    filmeLista *prox;
-    filmeLista *ant;
-}filmeLista;
+    struct filmeLista *prox;
+    struct filmeLista *ant;
+};
 
-typedef struct posicaoLista{
-    filmeLista *inicio;
-    filmeLista *fim;
+typedef struct posicaoLista {
+    struct filmeLista *inicio;
+    struct filmeLista *fim;
 } posicaoLista;
 
-// Estrutura de AVL de usuarios
 typedef struct usuarioBloco {
     char nome[50];
     int numeroUSP;
@@ -26,45 +27,47 @@ typedef struct usuarioBloco {
     struct usuarioBloco *esq;
     struct usuarioBloco *dir;
     struct posicaoLista *posicao;
-    int fb; // Fator de balanceamento
-
+    int fb;  // Fator de balanceamento
 } usuarioBloco;
 
-// Estrutura de AVL de usuarios
 typedef struct usuarioArvore {
     usuarioBloco *raiz;
 } usuarioArvore;
 
-//Funcao que busca um usuario na arvore de usuarios
-usuarioBloco *buscaUsuario(usuarioBloco *raiz, int numeroUSP){
+// Inicializa a árvore de usuários
+void inicializaArvoreUsuarios(usuarioArvore *arvoreUsuarios) {
+    arvoreUsuarios->raiz = NULL;
+}
 
-    if(raiz == NULL){
+// Função que busca um usuário na árvore de usuários
+usuarioBloco *buscaUsuario(usuarioBloco *raiz, int numeroUSP) {
+    if (raiz == NULL) {
         return NULL;
     }
 
-    if(raiz->numeroUSP == numeroUSP){
+    if (raiz->numeroUSP == numeroUSP) {
         return raiz;
     }
 
-    if(raiz->numeroUSP < numeroUSP){
+    if (raiz->numeroUSP < numeroUSP) {
         return buscaUsuario(raiz->dir, numeroUSP);
     }
 
     return buscaUsuario(raiz->esq, numeroUSP);
 }
 
-// Função para calcular a interseção entre as listas de filmes
-int calcular_intersecao(Pessoa* pessoa, ArvoreUsuario*) {
+// Funções para calcular a interseção e união de filmes (para calcular similaridade de Jaccard)
+int calcular_intersecao(usuarioBloco* pessoa1, usuarioBloco* pessoa2) {
     int intersecao = 0;
-    filmeBloco* lista1 = pessoa->filmeLista;
-    filmeBloco* lista2 = usuario->filmeLista;
+    filmeLista* lista1 = pessoa1->posicao->inicio;
+    filmeLista* lista2 = pessoa2->posicao->inicio;
 
     while (lista1 != NULL) {
-        filmeBloco* aux2 = lista2;
+        filmeLista* aux2 = lista2;
         while (aux2 != NULL) {
-            if (lista1->filmelista == aux2->filmelista) {
+            if (strcmp(lista1->filme->nome, aux2->filme->nome) == 0) {
                 intersecao++;
-                break;  // Interseção encontrada, não há necessidade de continuar a busca
+                break;
             }
             aux2 = aux2->prox;
         }
@@ -73,24 +76,21 @@ int calcular_intersecao(Pessoa* pessoa, ArvoreUsuario*) {
     return intersecao;
 }
 
-// Função para calcular a união entre as listas de filmes
-int calcular_uniao(Pessoa* pessoa, ArvoreUsuario*) {
+int calcular_uniao(usuarioBloco* pessoa1, usuarioBloco* pessoa2) {
     int uniao = 0;
-    filmeBloco* lista1 = pessoa->filmeLista;
-    filmeBloco* lista2 = usuario->filmeLista;
+    filmeLista* lista1 = pessoa1->posicao->inicio;
+    filmeLista* lista2 = pessoa2->posicao->inicio;
 
-    // Contando filmes da primeira lista
     while (lista1 != NULL) {
         uniao++;
         lista1 = lista1->prox;
     }
 
-    // Contando filmes da segunda lista, sem contar os repetidos
     while (lista2 != NULL) {
-        filmeBloco* lista1_check = pessoa->filmeLista;
+        filmeLista* lista1_check = pessoa1->posicao->inicio;
         int ja_contado = 0;
         while (lista1_check != NULL) {
-            if (lista2->filmelista- == lista1_check->filmelista) {
+            if (strcmp(lista2->filme->nome, lista1_check->filme->nome) == 0) {
                 ja_contado = 1;
                 break;
             }
@@ -106,9 +106,9 @@ int calcular_uniao(Pessoa* pessoa, ArvoreUsuario*) {
 }
 
 // Função para calcular a similaridade de Jaccard
-double similaridade_jaccard(Pessoa* pessoa, ArvoreUsuario* ) {
-    int intersecao = calcular_intersecao(pessoa, usuario);
-    int uniao = calcular_uniao(pessoa, usuario);
+double similaridade_jaccard(usuarioBloco* pessoa1, usuarioBloco* pessoa2) {
+    int intersecao = calcular_intersecao(pessoa1, pessoa2);
+    int uniao = calcular_uniao(pessoa1, pessoa2);
 
     if (uniao == 0) {
         return 0.0;  // Se não houver filmes em comum ou nenhuma união
@@ -117,49 +117,114 @@ double similaridade_jaccard(Pessoa* pessoa, ArvoreUsuario* ) {
     return (double)intersecao / uniao;
 }
 
-void recomendar_colega(Pessoa* pessoa, ArvoreUsuario*ArvoreUsuarios) {
-    Pessoa* melhor_colega = NULL;
-    double melhor_similaridade = -1.0;  // Inicia com um valor negativo para garantir que qualquer similaridade será maior
-    Pessoa* aux = ArvoreUsuario-> raiz;
-
-    // Percorre todos os usuários para encontrar o mais similar
-    while (aux != NULL) {
-        if (aux != pessoa) {  // Não compara a pessoa consigo mesma
-            double similaridade = similaridade_jaccard(pessoa,ArvoreUsuario);
-            printf("Similaridade entre %s e %s: %.2f\n", pessoa->nome, aux->nome, similaridade);
-
-            // Se a similaridade for maior que a melhor já encontrada, atualiza o melhor colega
-            if (similaridade > melhor_similaridade) {
-                melhor_similaridade = similaridade;
-                melhor_colega = aux;
-            }
-        }
-        aux = aux->dir;  // Percorrendo a árvore binária
+// Função recursiva para recomendar o melhor colega
+void recomendar_colega_recursiva(usuarioBloco* pessoa, usuarioArvore* arvoreUsuarios, usuarioBloco* aux, double* melhor_similaridade, usuarioBloco** melhor_colega) {
+    if (aux == NULL) {
+        return;  // Condição de parada
     }
 
+    if (aux != pessoa) {
+        double similaridade = similaridade_jaccard(pessoa, aux);  // Calcula a similaridade
+        printf("Similaridade entre %s e %s: %.2f\n", pessoa->nome, aux->nome, similaridade);
+
+        // Atualiza o melhor colega caso a similaridade seja maior
+        if (similaridade > *melhor_similaridade) {
+            *melhor_similaridade = similaridade;
+            *melhor_colega = aux;
+        }
+    }
+
+    // Chama recursivamente para os dois filhos
+    recomendar_colega_recursiva(pessoa, arvoreUsuarios, aux->esq, melhor_similaridade, melhor_colega);
+    recomendar_colega_recursiva(pessoa, arvoreUsuarios, aux->dir, melhor_similaridade, melhor_colega);
+}
+
+// Função principal para recomendar o colega mais semelhante
+void Colega_Semelhante(usuarioBloco* pessoa, usuarioArvore* arvoreUsuarios) {
+    usuarioBloco* melhor_colega = NULL;
+    double melhor_similaridade = -1.0;  // Valor inicial
+
+    // Chama a função recursiva para encontrar o melhor colega
+    recomendar_colega_recursiva(pessoa, arvoreUsuarios, arvoreUsuarios->raiz, &melhor_similaridade, &melhor_colega);
+
+    // Exibe o melhor colega encontrado
     if (melhor_colega != NULL) {
+        printf("A pessoa com maior similaridade com %s é: %s com uma similaridade de %.2f\n", pessoa->nome, melhor_colega->nome, melhor_similaridade);
         printf("Recomenda-se que %s vá ao cinema com %s!\n", pessoa->nome, melhor_colega->nome);
     } else {
         printf("Nenhum colega foi encontrado para recomendar.\n");
     }
 }
 
-int main(){
-    int numeroUSP;
-    Pessoa*pessoa;
+//Aproveitando já crie o código para amigo diferente
 
-  // A primeira pergunta seria o quem e o usuario
-    printf("Qual o seu número USP, por favor ?")
+// Função recursiva para recomendar o melhor colega com o perfil mais diferente
+void recomendar_colega_diferente_recursiva(usuarioBloco* pessoa, usuarioArvore* arvoreUsuarios, usuarioBloco* aux, double* menor_similaridade, usuarioBloco** pior_colega) {
+    if (aux == NULL) {
+        return;  // Condição de parada
+    }
+
+    if (aux != pessoa) {
+        double similaridade = similaridade_jaccard(pessoa, aux);  // Calcula a similaridade
+        printf("Similaridade entre %s e %s: %.2f\n", pessoa->nome, aux->nome, similaridade);
+
+        // Atualiza o pior colega caso a similaridade seja menor
+        if (similaridade < *menor_similaridade) {
+            *menor_similaridade = similaridade;
+            *pior_colega = aux;
+        }
+    }
+
+    // Chama recursivamente para os dois filhos
+    recomendar_colega_diferente_recursiva(pessoa, arvoreUsuarios, aux->esq, menor_similaridade, pior_colega);
+    recomendar_colega_diferente_recursiva(pessoa, arvoreUsuarios, aux->dir, menor_similaridade, pior_colega);
+}
+
+// Função principal para recomendar o colega com o perfil mais diferente
+
+void Colega_Diferente(usuarioBloco* pessoa, usuarioArvore* arvoreUsuarios) {
+    usuarioBloco* pior_colega = NULL;
+    double menor_similaridade = 1.0;  // Valor máximo possível (sem similaridade)
+
+    // Chama a função recursiva para encontrar o pior colega
+    recomendar_colega_diferente_recursiva(pessoa, arvoreUsuarios, arvoreUsuarios->raiz, &menor_similaridade, &pior_colega);
+
+    // Exibe o pior colega encontrado
+    if (pior_colega != NULL) {
+        printf("A pessoa com menor similaridade com %s é: %s com uma similaridade de %.2f\n", pessoa->nome, pior_colega->nome, menor_similaridade);
+        printf("Recomenda-se que %s entre em contato com %s para pedir sugestões de filmes!\n", pessoa->nome, pior_colega->nome);
+    } else {
+        printf("Nenhum colega foi encontrado para recomendar.\n");
+    }
+}
+
+
+// Função principal do programa
+int main() {
+    int numeroUSP;
+    usuarioBloco* pessoa;
+    usuarioArvore arvoreUsuarios;
+
+    // Inicializa a árvore
+    inicializaArvoreUsuarios(&arvoreUsuarios);
+
+    // Solicita o número USP do usuário
+    printf("Qual o seu número USP, por favor? ");
     scanf("%d", &numeroUSP);
 
-     pessoa = buscaUsuario(ArvoreUsuario*, numeroUSP);
+    // Busca o usuário na árvore de usuários
+    pessoa = buscaUsuario(arvoreUsuarios.raiz, numeroUSP);
     if (pessoa == NULL) {
         printf("Usuário não encontrado!\n");
         return 1;
     }
 
-        recomendar_colega(pessoa, &ArvoreUsuario);
+    // Chama a função para recomendar o colega mais semelhante
+    Colega_Semelhante(pessoa, &arvoreUsuarios);
+    
+    //Chama a função para recomendar o colega mais diferente
+    Colega_Diferente(pessoa, &arvoreUsuarios);
 
+    
     return 0;
-} 
-
+}
