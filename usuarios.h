@@ -36,6 +36,6 @@ usuarioBloco *rotacionarDireita(usuarioBloco *noDesbalanceado);
 usuarioBloco *rotacionarEsquerda(usuarioBloco *noDesbalanceado);
 int obterFatorBalanceamento(usuarioBloco *no);
 usuarioBloco* inserirNo(usuarioBloco* raiz, char nome[], char senha[], int numeroUSP);
-void inserirUsuario(usuarioArvore *arvore, usuarioBloco novoUsuario);
+void deletaRecursivamenteTodaArvore(usuarioBloco *raiz);
 
 #endif // USUARIOS_H

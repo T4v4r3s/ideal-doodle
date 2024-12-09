@@ -129,15 +129,18 @@ int buscaUspSenha(usuarioArvore *usuarios, int NUSP, char senha[]){
 
     //Caso nao ache um usuario com o nome
     if(procurado == NULL){
-        return 1;
+        printf("Usuario nao encontrado\n");
+        return 0;
     }
     //Caso ache o usuario e senha valida
     if(strcmp(procurado->senha, senha) == 0){
-        return 0;
+        printf("Usuario logado com sucesso\n");
+        return 1;
     }
 
     //Caso ache usuario mas senha errada
-    return 1;
+    printf("Senha incorreta\n");
+    return 0;
 
 }
 
@@ -218,8 +221,9 @@ int obterFatorBalanceamento(usuarioBloco *no) {
 //Funcao para inserir um novo nó na árvore AVL
 usuarioBloco* inserirNo(usuarioBloco* raiz, char nome[], char senha[], int numeroUSP) {
     // 1. Realiza a insercao normal na arvore
-    if (raiz == NULL)
+    if (raiz == NULL){
         return(criarNovoNo(nome, senha, numeroUSP));
+    }
 
     if (numeroUSP < raiz->numeroUSP)
         raiz->esq = inserirNo(raiz->esq, nome, senha, numeroUSP);
@@ -263,7 +267,15 @@ usuarioBloco* inserirNo(usuarioBloco* raiz, char nome[], char senha[], int numer
     return raiz;
 }
 
-//Funcao para inserir um novo usuario na arvore AVL
-void inserirUsuario(usuarioArvore *arvore, usuarioBloco novoUsuario) {
-    arvore->raiz = inserirNo(arvore->raiz, novoUsuario.nome, novoUsuario.senha, novoUsuario.numeroUSP);
-} //(Mudar para int e tratar erros)(sim, vai causar um pouco de retrabalho)
+void deletaRecursivamenteTodaArvore(usuarioBloco *raiz){
+
+    if(raiz == NULL){
+        return;
+    }
+
+    deletaRecursivamenteTodaArvore(raiz->esq);
+    deletaRecursivamenteTodaArvore(raiz->dir);
+    free(raiz);
+
+    return;
+}
