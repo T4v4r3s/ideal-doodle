@@ -140,3 +140,14 @@ void destroiListaFilmes(posicaoLista *posicoes){
     posicoes->fim = NULL;
 
 }
+
+// Funcao que printa os filmes na tela do usuario
+ void ImprimirListaFilme(&posicaoLista){
+
+    No*aux = posicao -> inicio;
+    
+    while(aux != NULL){
+        printf("Filmes do usuario são: %s,  ", aux -> filmes);
+        aux = aux -> prox;
+    }
+ }
