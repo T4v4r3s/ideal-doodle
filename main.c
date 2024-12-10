@@ -35,10 +35,10 @@ int main() {
     usuarioArvore *usuarios = inicializaArvoreUsuarios();
     usuarioBloco *usuarioLogado;
 
-    posicaoLista *filmesPosicao = NULL;
+    posicaoLista *filmesPosicao = (posicaoLista *) malloc(sizeof(posicaoLista));
     inicializaListaFilmes(filmesPosicao);
     filmeLista *filmes = criaListaFilmes(filmesPosicao);
-
+    
     while (funcionando) {
 
         printf("---------------------------");
