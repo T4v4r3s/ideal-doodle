@@ -37,7 +37,7 @@ int main() {
 
     posicaoLista *filmesPosicao = (posicaoLista *) malloc(sizeof(posicaoLista));
     inicializaListaFilmes(filmesPosicao);
-    filmeLista *filmes = criaListaFilmes(filmesPosicao);
+    filmeLista *filmes = NULL;
     
     while (funcionando) {
 
