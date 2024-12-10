@@ -42,40 +42,45 @@ filmeBloco *criaBlocoFilme(char nome[]){
 }
 
 //Funcao que insere um filme na lista de filmes de forma ordenada
-int insereFilmeOrdenado(posicaoLista *posicoes, filmeBloco *novo){
-
-    filmeLista *aux = posicoes->inicio;
-    filmeLista *ant = NULL;
-
-    while(aux != NULL && strcmp(aux->filme->nome, novo->nome) < 0){
-        ant = aux;
-        aux = aux->prox;
-    }
-
+int insereFilmeOrdenado(posicaoLista *posicoes, filmeBloco *novo) {
+    
     filmeLista *novoBloco = (filmeLista *) malloc(sizeof(filmeLista));
-    if(novoBloco == NULL){
+    if (novoBloco == NULL) {
         return 0;
     }
     novoBloco->filme = novo;
+    novoBloco->prox = NULL;
+    novoBloco->ant = NULL;
 
-    if(ant == NULL){
-        novoBloco->prox = posicoes->inicio;
-        novoBloco->ant = NULL;
-        posicoes->inicio->ant = novoBloco;
+    if (posicoes->inicio == NULL) { // Lista vazia
         posicoes->inicio = novoBloco;
+        posicoes->fim = novoBloco;
     } else {
-        novoBloco->prox = ant->prox;
-        novoBloco->ant = ant;
-        if(ant->prox == NULL){
-            posicoes->fim = novoBloco;
-        } else {
-            ant->prox->ant = novoBloco;
+        filmeLista *aux = posicoes->inicio;
+        filmeLista *ant = NULL;
+
+        while (aux != NULL && strcmp(aux->filme->nome, novo->nome) < 0) {
+            ant = aux;
+            aux = aux->prox;
         }
-        ant->prox = novoBloco;
+
+        if (ant == NULL) { // Inserção no início
+            novoBloco->prox = posicoes->inicio;
+            posicoes->inicio->ant = novoBloco;
+            posicoes->inicio = novoBloco;
+        } else { // Inserção no meio ou no fim
+            novoBloco->prox = ant->prox;
+            novoBloco->ant = ant;
+            if (ant->prox == NULL) {
+                posicoes->fim = novoBloco;
+            } else {
+                ant->prox->ant = novoBloco;
+            }
+            ant->prox = novoBloco;
+        }
     }
 
     return 1;
-
 }
 
 //Funcao que busca um filme na lista de filmes
