@@ -10,6 +10,8 @@ void exibirMenu();
 void imprimeFilmesEmOrdem(posicaoLista *p);
 void imprimeFilmesReverso(posicaoLista *p);
 void imprimeListaFilmesUsuario(usuarioBloco *usuario);
+void recomendar_colega_diferente_recursiva(usuarioBloco* pessoa, usuarioArvore* arvoreUsuarios, usuarioBloco* aux, double* menor_similaridade, usuarioBloco** pior_colega);
+void recomendar_colega_recursiva(usuarioBloco* pessoa, usuarioArvore* arvoreUsuarios, usuarioBloco* aux, double* melhor_similaridade, usuarioBloco** melhor_colega);
 
 int main() {
 
@@ -23,12 +25,19 @@ int main() {
     int NUSPCriacao;
     int escolhaPrint;
     int NUSPBusca;
-    char nomeFilme[50];
+    //char nomeFilme[50];
+
+    // Variáveis para armazenar o melhor e o pior colega
+    usuarioBloco *melhor_colega = NULL;
+    usuarioBloco *pior_colega = NULL;
 
     //Inicialização das estruturas
     usuarioArvore *usuarios = inicializaArvoreUsuarios();
-    posicaoLista filmes;
     usuarioBloco *usuarioLogado;
+
+    posicaoLista *filmesPosicao = NULL;
+    inicializaListaFilmes(filmesPosicao);
+    filmeLista *filmes = criaListaFilmes(filmesPosicao);
 
     while (funcionando) {
 
@@ -132,7 +141,7 @@ int main() {
 
                     break;
                 case 4:
-                    // Listar Filmes
+                    // Listar Filmes cadastrados
 
                     printf("Escolha a forma de impressao:\n");
                     printf("1 - Em ordem\n");
@@ -141,38 +150,37 @@ int main() {
                     scanf("%d", &escolhaPrint);
 
                     if(escolhaPrint == 1){
-                        imprimeFilmesEmOrdem(&filmes);
+                        imprimeFilmesEmOrdem(filmesPosicao);
                     } else if(escolhaPrint == 2){
-                        imprimeFilmesReverso(&filmes);
+                        imprimeFilmesReverso(filmesPosicao);
                     } else {
                         printf("Opcao invalida\n");
                     }
 
                     break;
                 case 5:
-                    // Buscar Filme
+                    // Buscar Filme cadastrado no sistema
 
                     char nomeFilme[50];
                     printf("Informe o nome do filme que deseja buscar: ");
                     scanf("%s", nomeFilme);
 
-                    filmeBloco *buscado = buscaFilme(filmes.inicio, nomeFilme);
+                    filmeBloco *buscadoFilme = buscaFilme(filmes, nomeFilme);
 
                     if(buscado == NULL){
                         printf("Filme nao encontrado\n");
                     } else {
-                        printf("Nome: %s\n", buscado->nome); // Podemos só falar que foi encontrado se quisermos
+                        printf("Filme encontrado!\n");
+                        printf("Nome: %s\n", buscadoFilme->nome); // Podemos só falar que foi encontrado se quisermos
                     }
                     
                     break;
                 case 6:
                     // Recomendar Colega para ir ao cinema
-
-                        usuarioBloco *melhor_colega = NULL;
                         double melhor_similaridade = -1.0;  // Valor inicial
 
                         // Chama a função recursiva para encontrar o melhor colega
-                        recomendar_colega_recursiva(usuarioLogado, usuarios, usuarios->raiz, &melhor_similaridade, melhor_colega);
+                        recomendar_colega_recursiva(usuarioLogado, usuarios, usuarios->raiz, &melhor_similaridade, &melhor_colega);
 
                         // Exibe o melhor colega encontrado
                         if (melhor_colega != NULL) {
@@ -186,11 +194,10 @@ int main() {
                 case 7:
                     // Recomendar Colega com perfil diferente
 
-                        usuarioBloco *pior_colega = NULL;
                         double menor_similaridade = 1.0;  // Valor máximo possível (sem similaridade)
 
                         // Chama a função recursiva para encontrar o pior colega
-                        recomendar_colega_diferente_recursiva(usuarioLogado, usuarios, usuarios->raiz, &menor_similaridade, pior_colega);
+                        recomendar_colega_diferente_recursiva(usuarioLogado, usuarios, usuarios->raiz, &menor_similaridade, &pior_colega);
 
                         // Exibe o pior colega encontrado
                         if (pior_colega != NULL) {
@@ -224,7 +231,7 @@ int main() {
                     scanf("%s", nomeFilme);
 
                     filmeBloco *novoFilme = criaBlocoFilme(nomeFilme);
-                    insereFilmeOrdenado(&filmes, novoFilme);
+                    insereFilmeOrdenado(filmesPosicao, novoFilme);
 
                     break;
                 case 13:
@@ -233,14 +240,14 @@ int main() {
                     printf("Informe o nome do filme que deseja remover: ");
                     scanf("%s", nomeFilme);
 
-                    removeFilme(&filmes, nomeFilme);
+                    removeFilme(filmesPosicao->inicio, nomeFilme);
 
                     break;
                 case 0:
                     printf("Encerrando o programa. Até mais!\n");
 
                     // Liberar memória
-                    destroiListaFilmes(&filmes);
+                    destroiListaFilmes(filmesPosicao);
                     deletaRecursivamenteTodaArvore(usuarios->raiz);
 
                     // Encerrar o programa
@@ -332,4 +339,26 @@ void recomendar_colega_diferente_recursiva(usuarioBloco* pessoa, usuarioArvore* 
     // Chama recursivamente para os dois filhos
     recomendar_colega_diferente_recursiva(pessoa, arvoreUsuarios, aux->esq, menor_similaridade, pior_colega);
     recomendar_colega_diferente_recursiva(pessoa, arvoreUsuarios, aux->dir, menor_similaridade, pior_colega);
+}
+
+// Função recursiva para recomendar o melhor colega
+void recomendar_colega_recursiva(usuarioBloco* pessoa, usuarioArvore* arvoreUsuarios, usuarioBloco* aux, double* melhor_similaridade, usuarioBloco** melhor_colega) {
+    if (aux == NULL) {
+        return;  // Condição de parada
+    }
+
+    if (aux != pessoa) {
+        double similaridade = similaridade_jaccard(pessoa, aux);  // Calcula a similaridade
+        printf("Similaridade entre %s e %s: %.2f\n", pessoa->nome, aux->nome, similaridade);
+
+        // Atualiza o melhor colega caso a similaridade seja maior
+        if (similaridade > *melhor_similaridade) {
+            *melhor_similaridade = similaridade;
+            *melhor_colega = aux;
+        }
+    }
+
+    // Chama recursivamente para os dois filhos
+    recomendar_colega_recursiva(pessoa, arvoreUsuarios, aux->esq, melhor_similaridade, melhor_colega);
+    recomendar_colega_recursiva(pessoa, arvoreUsuarios, aux->dir, melhor_similaridade, melhor_colega);
 }
