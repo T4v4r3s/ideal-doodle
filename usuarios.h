@@ -11,7 +11,7 @@ typedef struct usuarioBloco {
     int altura;
     struct usuarioBloco *esq;
     struct usuarioBloco *dir;
-    struct posicaoLista *posicao;
+    struct posicaoLista *posicao; // Lista de filmes
     int fb; // Fator de balanceamento
 
 } usuarioBloco;
@@ -37,5 +37,9 @@ usuarioBloco *rotacionarEsquerda(usuarioBloco *noDesbalanceado);
 int obterFatorBalanceamento(usuarioBloco *no);
 usuarioBloco* inserirNo(usuarioBloco* raiz, char nome[], char senha[], int numeroUSP);
 void deletaRecursivamenteTodaArvore(usuarioBloco *raiz);
+int adicionarFilmeUsuario(usuarioBloco *usuario, filmeBloco *filme);
+int removeUsuarioAvl(usuarioArvore *usuarios, int numeroUSP);
+usuarioBloco* removeNoAvl(usuarioBloco* raiz, int numeroUSP);
+usuarioBloco* minValor(usuarioBloco* usuario);
 
 #endif // USUARIOS_H

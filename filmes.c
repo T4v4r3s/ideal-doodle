@@ -54,7 +54,7 @@ int insereFilmeOrdenado(posicaoLista *posicoes, filmeBloco *novo){
 
     filmeLista *novoBloco = (filmeLista *) malloc(sizeof(filmeLista));
     if(novoBloco == NULL){
-        return 1;
+        return 0;
     }
     novoBloco->filme = novo;
 
@@ -74,7 +74,7 @@ int insereFilmeOrdenado(posicaoLista *posicoes, filmeBloco *novo){
         ant->prox = novoBloco;
     }
 
-    return 0;
+    return 1;
 
 }
 

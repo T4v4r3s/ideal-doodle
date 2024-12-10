@@ -79,6 +79,18 @@ int main() {
             usuarios->raiz = inserirNo(usuarios->raiz, nomeCriacao, senhaCriacao, NUSPCriacao);
 
             break;
+        case 3:
+            printf("Encerrando o programa. Até mais!\n");
+
+            // Liberar memória
+            deletaRecursivamenteTodaArvore(usuarios->raiz);
+            destroiListaFilmes(filmesPosicao);
+
+            // Encerrar o programa
+            logado = 0;
+            funcionando = 0;
+
+            break;
         default:
             printf("Informe um numero valido!");
             break;
@@ -219,10 +231,17 @@ int main() {
                     printf("Informe o numero USP do aluno que deseja remover: ");
                     scanf("%d", &NUSPBusca);
 
+                    if(removeUsuarioAvl(usuarios, NUSPBusca)){
+                        printf("Usuario removido com sucesso\n");
+                    } else {
+                        printf("Usuario nao encontrado\n");
+                    }
                     
                     break;
                 case 11:
-                    //funcionalidadeExtra();
+                    // Voltar ao menu
+
+                    logado = 0;
                     break;
                 case 12:
                     // Cadastrar Filme
@@ -243,12 +262,32 @@ int main() {
                     removeFilme(filmesPosicao->inicio, nomeFilme);
 
                     break;
+                case 14:
+
+                    // Adiciona filme favorito ao usuário
+
+                    printf("Informe o nome do filme que deseja adicionar: ");
+                    scanf("%s", nomeFilme);
+
+                    filmeBloco *filmeFavorito = buscaFilme(filmesPosicao->inicio, nomeFilme);
+
+                    if(filmeFavorito == NULL){
+                        printf("Filme nao encontrado\n");
+                    } else {
+                        if(adicionarFilmeUsuario(usuarioLogado, filmeFavorito)){
+                            printf("Filme adicionado com sucesso\n");
+                        } else {
+                            printf("Erro ao adicionar filme\n");
+                        }
+                    }
+
+                    break;
                 case 0:
                     printf("Encerrando o programa. Até mais!\n");
 
                     // Liberar memória
-                    destroiListaFilmes(filmesPosicao);
                     deletaRecursivamenteTodaArvore(usuarios->raiz);
+                    destroiListaFilmes(filmesPosicao);
 
                     // Encerrar o programa
                     logado = 0;
@@ -283,10 +322,10 @@ void exibirMenu() {
     printf("8) Salvar dados em arquivo\n");
     printf("9) Exibir dados técnicos da árvore\n");
     printf("10) Remover aluno do sistema\n");
-    printf("11) Funcionalidade extra\n");
+    printf("11) Voltar ao menu\n");
     printf("12) Cadastrar filme\n");
     printf("13) Remover filme\n");
-    printf("0) Sair\n");
+    printf("0) Finalizar programa!\n");
     printf("==============================\n");
     printf("Escolha uma opção: ");
 }

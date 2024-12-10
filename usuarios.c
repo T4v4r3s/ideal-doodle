@@ -279,3 +279,91 @@ void deletaRecursivamenteTodaArvore(usuarioBloco *raiz){
 
     return;
 }
+
+int adicionarFilmeUsuario(usuarioBloco *usuario, filmeBloco *filme){
+
+    if(insereFilmeOrdenado(usuario->posicao, filme)){
+        return 1;
+    }
+
+    return 0;
+
+}
+
+int removeUsuarioAvl(usuarioArvore *usuarios, int numeroUSP){
+
+    usuarioBloco *procurado = buscaUsuario(usuarios->raiz, numeroUSP);
+
+    if(procurado == NULL){
+        return 0;
+    }
+
+    usuarios->raiz = removeNoAvl(usuarios->raiz, numeroUSP);
+    return 1;
+}
+
+usuarioBloco* removeNoAvl(usuarioBloco* raiz, int numeroUSP) {
+    if (raiz == NULL) {
+        return raiz;
+    }
+
+    if (numeroUSP < raiz->numeroUSP) {
+        raiz->esq = removeNoAvl(raiz->esq, numeroUSP);
+    } else if (numeroUSP > raiz->numeroUSP) {
+        raiz->dir = removeNoAvl(raiz->dir, numeroUSP);
+    } else {
+        if ((raiz->esq == NULL) || (raiz->dir == NULL)) {
+            usuarioBloco *temp = raiz->esq ? raiz->esq : raiz->dir;
+
+            if (temp == NULL) {
+                temp = raiz;
+                raiz = NULL;
+            } else {
+                *raiz = *temp;
+            }
+            free(temp);
+        } else {
+            usuarioBloco* temp = minValor(raiz->dir);
+            raiz->numeroUSP = temp->numeroUSP;
+            raiz->dir = removeNoAvl(raiz->dir, temp->numeroUSP);
+        }
+    }
+
+    if (raiz == NULL) {
+        return raiz;
+    }
+
+    raiz->altura = 1 + obterMaximo(obterAltura(raiz->esq), obterAltura(raiz->dir));
+
+    int balanceamento = obterFatorBalanceamento(raiz);
+
+    if (balanceamento > 1 && obterFatorBalanceamento(raiz->esq) >= 0) {
+        return rotacionarDireita(raiz);
+    }
+
+    if (balanceamento > 1 && obterFatorBalanceamento(raiz->esq) < 0) {
+        raiz->esq = rotacionarEsquerda(raiz->esq);
+        return rotacionarDireita(raiz);
+    }
+
+    if (balanceamento < -1 && obterFatorBalanceamento(raiz->dir) <= 0) {
+        return rotacionarEsquerda(raiz);
+    }
+
+    if (balanceamento < -1 && obterFatorBalanceamento(raiz->dir) > 0) {
+        raiz->dir = rotacionarDireita(raiz->dir);
+        return rotacionarEsquerda(raiz);
+    }
+
+    return raiz;
+}
+
+
+
+usuarioBloco* minValor(usuarioBloco* usuario) {
+    usuarioBloco* atual = usuario;
+    while (atual->esq != NULL) {
+        atual = atual->esq;
+    }
+    return atual;
+}
