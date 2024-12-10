@@ -8,8 +8,8 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g
 
 # Arquivos-fonte e cabeçalhos
-SRCS = main.c filmes.c usuarios.c
-HEADERS = filmes.h usuarios.h
+SRCS = main.c filmes.c usuarios.c recomendar.c
+HEADERS = filmes.h usuarios.h recomendar.h
 
 # Objetos gerados
 OBJS = $(SRCS:.c=.o)

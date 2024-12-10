@@ -28,6 +28,5 @@ int insereFilmeOrdenado(posicaoLista *posicoes, filmeBloco *novo);
 filmeBloco *buscaFilme(filmeLista *lista, char nome[]);
 int removeFilme(filmeLista *lista, char nome[]);
 void destroiListaFilmes(posicaoLista *posicoes);
-void ImprimirListaFilme(&posicaoLista);
 
 #endif
