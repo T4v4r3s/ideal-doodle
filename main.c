@@ -37,7 +37,6 @@ int main() {
 
     posicaoLista *filmesPosicao = (posicaoLista *) malloc(sizeof(posicaoLista));
     inicializaListaFilmes(filmesPosicao);
-    filmeLista *filmes = NULL;
     
     while (funcionando) {
 
@@ -173,13 +172,18 @@ int main() {
                 case 5:
                     // Buscar Filme cadastrado no sistema
 
+                    if (filmesPosicao->inicio == NULL){
+                        printf("Nenhum filme cadastrado\n");
+                        break;
+                    }
+
                     char nomeFilme[50];
                     printf("Informe o nome do filme que deseja buscar: ");
                     scanf("%s", nomeFilme);
 
-                    filmeBloco *buscadoFilme = buscaFilme(filmes, nomeFilme);
+                    filmeBloco *buscadoFilme = buscaFilme(filmesPosicao->inicio, nomeFilme);
 
-                    if(buscado == NULL){
+                    if(buscadoFilme == NULL){
                         printf("Filme nao encontrado\n");
                     } else {
                         printf("Filme encontrado!\n");
