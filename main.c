@@ -76,7 +76,7 @@ int main() {
 
             printf("Informe a senha\n");
             scanf("%s", senhaCriacao);
-
+            
             usuarios->raiz = inserirNo(usuarios->raiz, nomeCriacao, senhaCriacao, NUSPCriacao);
 
             break;
@@ -305,7 +305,6 @@ int main() {
                 case 14:
 
                     // Adiciona filme favorito ao usuário
-
                     printf("Informe o nome do filme que deseja adicionar: ");
                     scanf("%s", nomeFilme);
 
@@ -313,7 +312,8 @@ int main() {
 
                     if(filmeFavorito == NULL){
                         printf("Filme nao encontrado\n");
-                    } else {
+                    } 
+                    else {
                         if(adicionarFilmeUsuario(usuarioLogado, filmeFavorito)){
                             printf("Filme adicionado com sucesso\n");
                         } else {
@@ -362,7 +362,7 @@ void exibirMenu() {
     printf("8) Salvar dados em arquivo\n");
     printf("9) Exibir dados técnicos da árvore\n");
     printf("10) Remover aluno do sistema\n");
-    printf("11) Voltar ao menu\n");
+    printf("11) Voltar ao menu de login\n");
     printf("12) Cadastrar filme\n");
     printf("13) Remover filme\n");
     printf("14) Adicionar filme favorito ao usuário\n");

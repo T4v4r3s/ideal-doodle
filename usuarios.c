@@ -222,7 +222,7 @@ int obterFatorBalanceamento(usuarioBloco *no) {
 usuarioBloco* inserirNo(usuarioBloco* raiz, char nome[], char senha[], int numeroUSP) {
     // 1. Realiza a insercao normal na arvore
     if (raiz == NULL){
-        return(criarNovoNo(nome, senha, numeroUSP));
+        return(criaBlocoUsuario(nome, numeroUSP, senha));
     }
 
     if (numeroUSP < raiz->numeroUSP)
