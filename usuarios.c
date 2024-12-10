@@ -275,6 +275,7 @@ void deletaRecursivamenteTodaArvore(usuarioBloco *raiz){
 
     deletaRecursivamenteTodaArvore(raiz->esq);
     deletaRecursivamenteTodaArvore(raiz->dir);
+    destroiListaFilmes(raiz->posicao);
     free(raiz);
 
     return;
