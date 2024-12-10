@@ -267,6 +267,7 @@ usuarioBloco* inserirNo(usuarioBloco* raiz, char nome[], char senha[], int numer
     return raiz;
 }
 
+// Função para deletar recursivamente toda a árvore
 void deletaRecursivamenteTodaArvore(usuarioBloco *raiz){
 
     if(raiz == NULL){
@@ -281,6 +282,7 @@ void deletaRecursivamenteTodaArvore(usuarioBloco *raiz){
     return;
 }
 
+// Função para adicionar um filme ao usuário
 int adicionarFilmeUsuario(usuarioBloco *usuario, filmeBloco *filme){
 
     if(insereFilmeOrdenado(usuario->posicao, filme)){
@@ -291,6 +293,7 @@ int adicionarFilmeUsuario(usuarioBloco *usuario, filmeBloco *filme){
 
 }
 
+// Função para remover um usuário da árvore AVL
 int removeUsuarioAvl(usuarioArvore *usuarios, int numeroUSP){
 
     usuarioBloco *procurado = buscaUsuario(usuarios->raiz, numeroUSP);
@@ -359,12 +362,38 @@ usuarioBloco* removeNoAvl(usuarioBloco* raiz, int numeroUSP) {
     return raiz;
 }
 
-
-
+// Função para obter o nó com o menor valor
 usuarioBloco* minValor(usuarioBloco* usuario) {
     usuarioBloco* atual = usuario;
     while (atual->esq != NULL) {
         atual = atual->esq;
     }
     return atual;
+}
+
+// Função para obter o numero de nós
+int obterNumeroNos(usuarioBloco *raiz){
+
+    if(raiz == NULL){
+        return 0;
+    }
+
+    return 1 + obterNumeroNos(raiz->esq) + obterNumeroNos(raiz->dir);
+}
+
+// Função para obter a maior diferença de altura entre subárvores
+int obterMaiorDiferencaAltura(usuarioBloco *raiz) {
+    if (raiz == NULL) {
+        return 0;
+    }
+
+    int alturaEsquerda = obterAltura(raiz->esq);
+    int alturaDireita = obterAltura(raiz->dir);
+
+    int diferenca = abs(alturaEsquerda - alturaDireita);
+
+    int maiorDiferencaEsquerda = obterMaiorDiferencaAltura(raiz->esq);
+    int maiorDiferencaDireita = obterMaiorDiferencaAltura(raiz->dir);
+
+    return obterMaximo(diferenca, obterMaximo(maiorDiferencaEsquerda, maiorDiferencaDireita));
 }

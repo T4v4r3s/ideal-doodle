@@ -12,6 +12,8 @@ void imprimeFilmesReverso(posicaoLista *p);
 void imprimeListaFilmesUsuario(usuarioBloco *usuario);
 void recomendar_colega_diferente_recursiva(usuarioBloco* pessoa, usuarioArvore* arvoreUsuarios, usuarioBloco* aux, double* menor_similaridade, usuarioBloco** pior_colega);
 void recomendar_colega_recursiva(usuarioBloco* pessoa, usuarioArvore* arvoreUsuarios, usuarioBloco* aux, double* melhor_similaridade, usuarioBloco** melhor_colega);
+void salvaUsuariosEmOrdem(usuarioBloco *raiz, FILE *arquivo);
+void salvaFilmes(filmeLista *lista, FILE *arquivo);
 
 int main() {
 
@@ -224,10 +226,44 @@ int main() {
                         }
                     break;
                 case 8:
-                    //salvarDadosEmArquivo();
+                    // Salvar dados em arquivo
+
+                    FILE *arquivo = fopen("usuarios.txt", "w");
+                    
+                    if(arquivo == NULL){
+                        printf("Erro ao abrir arquivo\n");
+                        break;
+                    }
+
+                    salvaUsuariosEmOrdem(usuarios->raiz, arquivo);
+
+                    printf("Dados de usuarios salvos com sucesso\n");
+
+                    fclose(arquivo);
+
+                    // Salva dados de filmes
+
+                    FILE *arquivoFilmes = fopen("filmes.txt", "w");
+
+                    if(arquivoFilmes == NULL){
+                        printf("Erro ao abrir arquivo\n");
+                        break;
+                    }
+
+                    salvaFilmes(filmesPosicao->inicio, arquivoFilmes);
+
+                    printf("Dados de filmes salvos com sucesso\n");
+
+                    fclose(arquivoFilmes);
+
                     break;
                 case 9:
-                    //exibirDadosArvore();
+                    // Exibir dados técnicos da árvore
+
+                    printf("Altura da árvore: %d\n", obterAltura(usuarios->raiz));
+                    printf("Número de nós: %d\n", obterNumeroNos(usuarios->raiz));
+                    printf("Maior diferença de altura entre subárvores: %d\n", obterMaiorDiferencaAltura(usuarios->raiz));
+
                     break;
                 case 10:
                     // Remover Aluno
@@ -329,6 +365,7 @@ void exibirMenu() {
     printf("11) Voltar ao menu\n");
     printf("12) Cadastrar filme\n");
     printf("13) Remover filme\n");
+    printf("14) Adicionar filme favorito ao usuário\n");
     printf("0) Finalizar programa!\n");
     printf("==============================\n");
     printf("Escolha uma opção: ");
@@ -404,4 +441,32 @@ void recomendar_colega_recursiva(usuarioBloco* pessoa, usuarioArvore* arvoreUsua
     // Chama recursivamente para os dois filhos
     recomendar_colega_recursiva(pessoa, arvoreUsuarios, aux->esq, melhor_similaridade, melhor_colega);
     recomendar_colega_recursiva(pessoa, arvoreUsuarios, aux->dir, melhor_similaridade, melhor_colega);
+}
+
+void salvaUsuariosEmOrdem(usuarioBloco *raiz, FILE *arquivo){
+    if(raiz != NULL){
+        salvaUsuariosEmOrdem(raiz->esq, arquivo);
+        fprintf(arquivo, "NOME: %s NUSP: %d SENHA: %s\n", raiz->nome, raiz->numeroUSP, raiz->senha);
+        
+        filmeLista *aux = raiz->posicao->inicio;
+        while (aux != NULL){
+            fprintf(arquivo, "FILME: %s\n", aux->filme->nome);
+            aux = aux->prox;
+        }
+        salvaUsuariosEmOrdem(raiz->dir, arquivo);
+    }
+}
+
+void salvaFilmes(filmeLista *lista, FILE *arquivo){
+    filmeLista *aux = lista;
+
+    if (lista == NULL){
+        return;
+    }
+    
+
+    while(aux != NULL){
+        fprintf(arquivo, "%s\n", aux->filme->nome);
+        aux = aux->prox;
+    }
 }

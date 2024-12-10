@@ -41,5 +41,7 @@ int adicionarFilmeUsuario(usuarioBloco *usuario, filmeBloco *filme);
 int removeUsuarioAvl(usuarioArvore *usuarios, int numeroUSP);
 usuarioBloco* removeNoAvl(usuarioBloco* raiz, int numeroUSP);
 usuarioBloco* minValor(usuarioBloco* usuario);
+int obterNumeroNos(usuarioBloco *raiz);
+int obterMaiorDiferencaAltura(usuarioBloco *raiz);
 
 #endif // USUARIOS_H
